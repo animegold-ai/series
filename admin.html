@@ -235,8 +235,9 @@
         return;
       }
 
-      if (newPassword.length < 6) {
-        messageDiv.innerText = "Password must be at least 6 characters long!";
+      // ADMIN ONLY: No minimum password length requirement
+      if (newPassword.length === 0) {
+        messageDiv.innerText = "Password cannot be empty!";
         messageDiv.style.color = "#ff4444";
         return;
       }
@@ -622,6 +623,7 @@
     <div class="modal-content">
       <h2>Change User Password</h2>
       <p>User: <strong id="passwordUserEmail"></strong></p>
+      <p style="font-size:12px; color:#ff9800;">⚠️ Admin: No length limit</p>
       <input type="password" id="newPasswordInput" placeholder="New Password" autocomplete="off">
       <input type="password" id="confirmPasswordInput" placeholder="Confirm Password" autocomplete="off">
       <div id="passwordChangeMessage" style="margin:10px 0; min-height:20px; font-size:13px;"></div>
