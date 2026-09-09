@@ -35,7 +35,7 @@
     .modal-content button { margin:10px 5px; padding:10px 20px; }
     .modal-content input { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; }
     .modal-content select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; }
-    .modal-content textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; font-family:monospace; background:#222; color:#fff; resize:vertical; min-height:100px; }
+    .modal-content textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; font-family:monospace; background:#222; color:#fff; resize:vertical; m[...]
     .name-row { display:flex; gap:10px; align-items:center; margin:5px 0; }
     .password-row { display:flex; gap:10px; align-items:center; margin:5px 0; }
     .password-input-wrapper { display:flex; gap:5px; align-items:center; flex:1; }
@@ -60,6 +60,7 @@
     .fraud-medium { background:#f39c12; color:#000; }
     .fraud-low { background:#27ae60; color:#fff; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getFirestore, collection, getDocs, updateDoc, doc, getDoc, deleteDoc, query, where } 
@@ -229,6 +230,9 @@
       }
 
       try {
+        // Hash the password using bcryptjs
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        
         const userRef = doc(db, "users", currentEditUserId);
         const snap = await getDoc(userRef);
         
@@ -238,9 +242,9 @@
         }
 
         const userData = snap.data();
-        const userEmail = userData.email;
 
-        await updateDoc(userRef, { password: newPassword });
+        // Store the hashed password
+        await updateDoc(userRef, { password: hashedPassword });
 
         alert(`✅ Password changed successfully for ${userData.userName || userData.email}!`);
         closePasswordModal();
