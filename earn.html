@@ -68,6 +68,12 @@
       animation: glow 2s ease-in-out infinite;
     }
 
+    h2 {
+      color: #ffb84d;
+      margin: 20px 0 15px 0;
+      font-size: 1.5em;
+    }
+
     @keyframes glow {
       0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 152, 0, 0.5)); }
       50% { filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8)); }
@@ -79,7 +85,7 @@
       border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
-      max-width: 800px;
+      max-width: 900px;
       box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
     }
 
@@ -149,8 +155,8 @@
 
     #seriesFrame {
       width: 100%;
-      max-width: 640px;
-      height: 360px;
+      max-width: 100%;
+      height: 600px;
       border-radius: 10px;
       border: 3px solid #ff9800;
       margin: 20px auto;
@@ -284,7 +290,6 @@
       max-width: 600px;
       text-align: left;
       font-size: 13px;
-      text-align: left;
     }
 
     .interaction-stats p {
@@ -310,6 +315,59 @@
       cursor: pointer;
       font-weight: bold;
       color: #ffb84d;
+    }
+
+    /* Episode Grid Styles */
+    .episodes-container {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 900px;
+    }
+
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .episode-btn {
+      background: #333;
+      border: 2px solid #555;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .episode-btn:hover {
+      background: #444;
+      border-color: #ff9800;
+    }
+
+    .episode-btn.active {
+      background: linear-gradient(135deg, #ff9800, #ffb84d);
+      border-color: #ff9800;
+      color: #111;
+      box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
+    }
+
+    .episode-btn.watched {
+      background: #27ae60;
+      border-color: #2ecc71;
+      color: white;
+    }
+
+    .series-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
     }
   </style>
   <script type="module">
@@ -338,8 +396,12 @@
     let heartbeatInterval;
     let lastHeartbeatTime = Date.now();
     let autoplayEnabled = localStorage.getItem('autoplayEnabled') === 'true';
+    let currentSeries = "system-analyzer";
+    let currentEpisode = 1;
+    let totalEpisodes = 30;
+    let watchedEpisodes = new Set();
 
-    // ✅ NEW: Watch Session Tracking
+    // Watch Session Tracking
     let currentWatchSession = null;
     let interactionStats = {
       clicks: 0,
@@ -349,11 +411,6 @@
       lastInteractionTime: Date.now(),
       iframeInView: false
     };
-
-    const pinoyUsernames = [
-      "MangJuan", "PinoyKing", "AlamKo", "KarenBit", "TrueBlue",
-      "Pambihira", "Sipag&Tiyaga", "LumalakasAng", "MakabagoBoy", "NoypiPride"
-    ];
 
     const wheelPrizes = [
       { points: 1, label: "1 Point", color: "#FFD700" },
@@ -382,13 +439,19 @@
           minuteCounter: 0,
           activityStatus: "inactive",
           createdAt: new Date().toISOString(),
-          lastActivityTime: new Date().toISOString()
+          lastActivityTime: new Date().toISOString(),
+          watchedEpisodes: {}
         });
       }
 
       userData = userSnap.data() || {};
       minuteCounter = userData.minuteCounter || 0;
       currentUserName = userData.username || "User";
+
+      // Load watched episodes
+      if (userData.watchedEpisodes && userData.watchedEpisodes[currentSeries]) {
+        watchedEpisodes = new Set(userData.watchedEpisodes[currentSeries]);
+      }
 
       document.getElementById("greeting").textContent = `Welcome, ${currentUserName}! 🎯`;
       document.getElementById("points").textContent = (minuteCounter / 300).toFixed(4) + " points";
@@ -397,16 +460,88 @@
       document.getElementById("pending").textContent = earnings.pending || "0";
       document.getElementById("total").textContent = earnings.total || "0";
 
-      // ✅ Set autoplay checkbox
       document.getElementById("autoplayToggle").checked = autoplayEnabled;
 
       createWheelCanvas();
+      generateEpisodeButtons();
     });
 
     window.logout = () => {
       signOut(auth).then(() => {
         window.location.href = "index.html";
       });
+    };
+
+    function generateEpisodeButtons() {
+      const container = document.getElementById("episodesGrid");
+      container.innerHTML = "";
+      
+      for (let i = 1; i <= totalEpisodes; i++) {
+        const btn = document.createElement("button");
+        btn.className = "episode-btn";
+        btn.textContent = i;
+        
+        if (i === currentEpisode) {
+          btn.classList.add("active");
+        }
+        if (watchedEpisodes.has(i)) {
+          btn.classList.add("watched");
+        }
+        
+        btn.onclick = () => loadEpisode(i);
+        container.appendChild(btn);
+      }
+    }
+
+    window.loadEpisode = (episodeNum) => {
+      currentEpisode = episodeNum;
+      const url = `https://trimz.tv/${currentSeries}`;
+      document.getElementById("seriesFrame").src = url;
+      generateEpisodeButtons();
+      watching = true;
+      startHeartbeat();
+
+      currentWatchSession = {
+        seriesName: currentSeries,
+        episode: episodeNum,
+        startTime: new Date().toISOString(),
+        pointsEarnedAtStart: minuteCounter / 300
+      };
+
+      interactionStats = {
+        clicks: 0,
+        touches: 0,
+        mouseEnters: 0,
+        totalFocusTime: 0,
+        lastInteractionTime: Date.now(),
+        iframeInView: false
+      };
+
+      setDoc(userRef, { 
+        activityStatus: "active", 
+        lastActivityTime: new Date().toISOString(),
+        currentWatchSession: currentWatchSession,
+        interactionData: interactionStats
+      }, { merge: true });
+
+      document.getElementById("statusBadge").textContent = "🟢 ACTIVE";
+      document.getElementById("statusBadge").className = "status-badge status-active";
+    };
+
+    window.changeSeries = async () => {
+      const selectedSeries = document.getElementById("seriesSelect").value;
+      currentSeries = selectedSeries;
+      currentEpisode = 1;
+
+      // Load watched episodes for this series
+      if (userData.watchedEpisodes && userData.watchedEpisodes[currentSeries]) {
+        watchedEpisodes = new Set(userData.watchedEpisodes[currentSeries]);
+      } else {
+        watchedEpisodes.clear();
+      }
+
+      generateEpisodeButtons();
+      document.getElementById("seriesFrame").src = "";
     };
 
     function createWheelCanvas() {
@@ -524,48 +659,6 @@
       if (heartbeatInterval) clearInterval(heartbeatInterval);
     }
 
-    window.loadSeries = async () => {
-      const selectedUrl = document.getElementById("seriesSelect").value;
-      const seriesName = document.getElementById("seriesSelect").options[document.getElementById("seriesSelect").selectedIndex].text;
-      
-      // Add autoplay parameter to URL
-      let urlWithAutoplay = selectedUrl;
-      if (!urlWithAutoplay.includes('?')) {
-        urlWithAutoplay += '?autoplay=1';
-      } else {
-        urlWithAutoplay += '&autoplay=1';
-      }
-      
-      document.getElementById("seriesFrame").src = urlWithAutoplay;
-      watching = true;
-      startHeartbeat();
-
-      currentWatchSession = {
-        seriesName: seriesName,
-        startTime: new Date().toISOString(),
-        pointsEarnedAtStart: minuteCounter / 300
-      };
-
-      interactionStats = {
-        clicks: 0,
-        touches: 0,
-        mouseEnters: 0,
-        totalFocusTime: 0,
-        lastInteractionTime: Date.now(),
-        iframeInView: false
-      };
-
-      await setDoc(userRef, { 
-        activityStatus: "active", 
-        lastActivityTime: new Date().toISOString(),
-        currentWatchSession: currentWatchSession,
-        interactionData: interactionStats
-      }, { merge: true });
-
-      document.getElementById("statusBadge").textContent = "🟢 ACTIVE";
-      document.getElementById("statusBadge").className = "status-badge status-active";
-    };
-
     window.stopWatching = async () => {
       watching = false;
       stopHeartbeat();
@@ -575,17 +668,27 @@
         const sessionDuration = Math.floor((Date.now() - Date.parse(currentWatchSession.startTime)) / 1000 / 60);
         const pointsEarned = (minuteCounter / 300) - currentWatchSession.pointsEarnedAtStart;
         
+        // Mark episode as watched
+        watchedEpisodes.add(currentEpisode);
+        
         try {
+          const watchedData = userData.watchedEpisodes || {};
+          if (!watchedData[currentSeries]) {
+            watchedData[currentSeries] = [];
+          }
+          watchedData[currentSeries] = Array.from(watchedEpisodes);
+
           await setDoc(userRef, {
             watchSessions: arrayUnion({
               series: currentWatchSession.seriesName,
+              episode: currentWatchSession.episode,
               startTime: currentWatchSession.startTime,
               endTime: new Date().toISOString(),
               durationMinutes: sessionDuration,
               pointsEarned: pointsEarned,
-              interactions: interactionStats,
-              verificationScore: calculateVerificationScore(sessionDuration, pointsEarned, interactionStats)
-            })
+              interactions: interactionStats
+            }),
+            watchedEpisodes: watchedData
           }, { merge: true });
         } catch (err) {
           console.error("Error saving watch session:", err);
@@ -600,18 +703,15 @@
       document.getElementById("statusBadge").className = "status-badge status-inactive";
 
       document.getElementById("seriesFrame").src = "";
-      document.getElementById("interactionStats").innerHTML = "";
+      generateEpisodeButtons();
       alert("Stopped watching. Status set to Inactive.");
     };
 
-    function calculateVerificationScore(duration, points, stats) {
-      let score = 50;
-      if (duration >= 20) score += 20;
-      if (duration >= 40) score += 15;
-      if (stats.clicks + stats.touches > 0) score += 10;
-      if (points > 0) score += 5;
-      return Math.min(score, 100);
-    }
+    window.toggleAutoplay = () => {
+      autoplayEnabled = document.getElementById("autoplayToggle").checked;
+      localStorage.setItem('autoplayEnabled', autoplayEnabled);
+      showNotification(`Autoplay ${autoplayEnabled ? 'enabled' : 'disabled'}`);
+    };
 
     // Interaction tracking
     document.addEventListener('click', () => {
@@ -621,13 +721,6 @@
     document.addEventListener('touchstart', () => {
       if (watching) interactionStats.touches++;
     });
-
-    // ✅ NEW: Autoplay toggle
-    window.toggleAutoplay = () => {
-      autoplayEnabled = document.getElementById("autoplayToggle").checked;
-      localStorage.setItem('autoplayEnabled', autoplayEnabled);
-      showNotification(`Autoplay ${autoplayEnabled ? 'enabled' : 'disabled'}`);
-    };
 
     // Real-time point updates
     if (updateInterval) clearInterval(updateInterval);
@@ -671,31 +764,35 @@
 
   <div class="section">
     <h2>👀 Watch Series</h2>
-    <select id="seriesSelect">
-      <option value="https://trimz.tv/system-analyzer?ep=1">System Analyzer</option>
-      <option value="https://trimz.tv/the-gamer?ep=1">The Gamer</option>
-      <option value="https://trimz.tv/player-reborn?ep=1">Player Reborn</option>
-      <option value="https://trimz.tv/quest-supremacy?ep=1">Quest Supremacy</option>
-      <option value="https://trimz.tv/99-reinforced-wooden-stick?ep=1">+99 Reinforced Wooden Stick</option>
-      <option value="https://trimz.tv/slam-jam?ep=1">Slam Jam</option>
-      <option value="https://trimz.tv/guardians-of-rokia?ep=1">Guardians of Rokia</option>
-      <option value="https://trimz.tv/lifeexe?ep=1">Life.exe</option>
-    </select>
+    <div class="series-selector">
+      <select id="seriesSelect" onchange="changeSeries()">
+        <option value="system-analyzer">System Analyzer</option>
+        <option value="the-gamer">The Gamer</option>
+        <option value="player-reborn">Player Reborn</option>
+        <option value="quest-supremacy">Quest Supremacy</option>
+        <option value="99-reinforced-wooden-stick">+99 Reinforced Wooden Stick</option>
+        <option value="slam-jam">Slam Jam</option>
+        <option value="guardians-of-rokia">Guardians of Rokia</option>
+        <option value="lifeexe">Life.exe</option>
+      </select>
 
-    <!-- ✅ AUTOPLAY TOGGLE -->
-    <div class="autoplay-toggle">
-      <input type="checkbox" id="autoplayToggle" onchange="toggleAutoplay()">
-      <label for="autoplayToggle">Enable Autoplay Next Episode</label>
+      <div class="autoplay-toggle">
+        <input type="checkbox" id="autoplayToggle" onchange="toggleAutoplay()">
+        <label for="autoplayToggle">Enable Autoplay Next Episode</label>
+      </div>
+    </div>
+
+    <div class="episodes-container">
+      <h3 style="color: #ffb84d; margin-bottom: 15px;">Episodes (Total: 30)</h3>
+      <div id="episodesGrid" class="episodes-grid"></div>
     </div>
 
     <div style="margin-top:20px;">
-      <iframe id="seriesFrame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+      <iframe id="seriesFrame" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <!-- ✅ NEW: Show interaction stats while watching -->
     <div id="interactionStats" class="interaction-stats"></div>
 
-    <button onclick="loadSeries()">Load</button>
     <button onclick="stopWatching()" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff;">Stop Watching</button>
   </div>
 
