@@ -59,6 +59,7 @@
     .fraud-high { background:#c0392b; color:#fff; }
     .fraud-medium { background:#f39c12; color:#000; }
     .fraud-low { background:#27ae60; color:#fff; }
+    .hash-badge { display:inline-block; padding:4px 8px; border-radius:4px; font-size:11px; background:#ff9800; color:#000; font-weight:bold; margin-left:5px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
   <script type="module">
@@ -122,11 +123,15 @@
             `;
           }
 
+          // Check if password is hashed (bcrypt hashes start with $2a$, $2b$, or $2y$)
+          const isHashed = data.password && (data.password.startsWith('$2a$') || data.password.startsWith('$2b$') || data.password.startsWith('$2y$'));
+          const hashBadge = isHashed ? '<span class="hash-badge">🔐 HASHED</span>' : '';
+
           html += `<li>
             <strong>Username:</strong> ${data.userName || "Not set"}<br>
             <strong>Email:</strong> ${data.email || "Not set"}<br>
             <div class="password-row">
-              <strong>Password:</strong>
+              <strong>Password:</strong> ${hashBadge}
               <div class="password-input-wrapper">
                 <input type="password" id="password-${docSnap.id}" value="${data.password || 'N/A'}" style="cursor:not-allowed;" disabled>
                 <button class="eye-btn" onclick="togglePasswordVisibility('${docSnap.id}')">👁️ Show</button>
@@ -246,7 +251,7 @@
         // Store the hashed password
         await updateDoc(userRef, { password: hashedPassword });
 
-        alert(`✅ Password changed successfully for ${userData.userName || userData.email}!`);
+        alert(`✅ Password changed successfully for ${userData.userName || userData.email}!\n\n🔐 Password is now hashed and secure.`);
         closePasswordModal();
         loadUsers();
       } catch (err) {
