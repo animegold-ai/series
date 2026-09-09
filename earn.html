@@ -66,195 +66,110 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: glow 2s ease-in-out infinite;
-      text-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
-      position: relative;
-      z-index: 1;
     }
 
     @keyframes glow {
-      0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 152, 0, 0.5)); }
-      50% { filter: drop-shadow(0 0 15px rgba(255, 152, 0, 0.8)); }
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 152, 0, 0.5)); }
+      50% { filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8)); }
     }
 
     .section {
-      background: rgba(20, 20, 40, 0.85);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      box-shadow: 0 8px 32px rgba(255, 152, 0, 0.2), 0 0 50px rgba(255, 152, 0, 0.1);
+      background: linear-gradient(135deg, rgba(51, 51, 51, 0.8), rgba(33, 33, 33, 0.8));
+      border-left: 5px solid #ff9800;
+      border-radius: 10px;
+      padding: 20px;
       margin: 20px auto;
-      padding: 25px;
-      border-radius: 15px;
-      max-width: 900px;
-      animation: slideIn 0.6s ease-out;
-      position: relative;
-      z-index: 1;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .section h2 {
-      color: #ffb84d;
-      margin-bottom: 15px;
-      font-size: 1.4em;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
     }
 
     .status-badge {
       display: inline-block;
-      padding: 8px 15px;
-      border-radius: 20px;
+      padding: 10px 20px;
+      border-radius: 25px;
       font-weight: bold;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .status-badge.status-active {
+      background: #27ae60;
+      color: white;
+    }
+
+    .status-badge.status-inactive {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .status-badge.status-banned {
+      background: #c0392b;
+      color: white;
+    }
+
+    p { margin: 10px 0; font-size: 16px; }
+
+    select, input[type="text"], input[type="number"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: #fff;
       margin: 10px 0;
       font-size: 14px;
-      animation: pulse 2s ease-in-out infinite;
+      width: 100%;
+      max-width: 400px;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    select:hover, input:hover {
+      background: #333;
     }
 
-    .status-active {
-      background: rgba(39, 174, 96, 0.4);
-      border: 2px solid #27ae60;
-      box-shadow: 0 0 15px rgba(39, 174, 96, 0.5);
-    }
-
-    .status-inactive {
-      background: rgba(149, 165, 166, 0.4);
-      border: 2px solid #95a5a6;
-      box-shadow: 0 0 15px rgba(149, 165, 166, 0.3);
-    }
-
-    .eligibility {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .card {
-      background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 152, 0, 0.05));
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      padding: 20px;
-      border-radius: 10px;
-      width: 160px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
-      border-color: #ff9800;
-    }
-
-    .card h3 {
-      margin: 0 0 10px 0;
-      color: #ffb84d;
-      font-size: 16px;
-    }
-
-    .card p {
-      color: #b0b0ff;
-      margin: 10px 0;
-      font-size: 13px;
-    }
-
-    .card button {
-      background: #ff9800;
+    button {
+      background: linear-gradient(135deg, #ff9800, #ffb84d);
       border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #000;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    .card button:hover {
-      background: #ffb84d;
-      transform: scale(1.05);
-    }
-
-    select {
-      padding: 10px 15px;
-      margin: 10px;
+      padding: 12px 30px;
       border-radius: 8px;
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
       cursor: pointer;
+      color: #111;
+      font-weight: bold;
+      font-size: 16px;
       transition: all 0.3s ease;
+      margin: 10px;
     }
 
-    select:focus {
-      border-color: #ff9800;
-      background: rgba(255, 152, 0, 0.1);
-      outline: none;
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 152, 0, 0.6);
     }
 
-    select option {
-      background: #1a0033;
-      color: #fff;
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #seriesFrame {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      border-radius: 10px;
+      border: 3px solid #ff9800;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 0 30px rgba(255, 152, 0, 0.3);
     }
 
     .wheel-container {
       position: relative;
       width: 300px;
       height: 300px;
-      margin: 20px auto;
-      animation: spinSlow 3s linear infinite;
+      margin: 30px auto;
     }
 
-    @keyframes spinSlow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .wheel {
+    #wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(255, 152, 0, 0.6), inset 0 0 30px rgba(255, 152, 0, 0.2);
-      transform: rotate(0deg);
-      background: conic-gradient(
-        from 0deg,
-        #ff9800 0deg 40deg,
-        #ff9800 40deg 80deg,
-        #ff9800 80deg 120deg,
-        #ff9800 120deg 160deg,
-        #ff9800 160deg 200deg,
-        #ff9800 200deg 240deg,
-        #ff9800 240deg 280deg,
-        #ff9800 280deg 320deg,
-        #ff9800 320deg 360deg
-      );
-    }
-
-    .wheel-segment {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
-      transform-origin: 50% 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #111;
-      font-size: 14px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 152, 0, 0.4);
     }
 
     .pointer {
@@ -277,200 +192,123 @@
       padding: 12px 30px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
+      color: white;
       font-weight: bold;
-      color: #fff;
-      margin: 10px;
+      font-size: 16px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
     }
 
-    .spin-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(39, 174, 96, 0.6);
+    .spin-button:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
     }
 
     .spin-button:disabled {
       background: #95a5a6;
       cursor: not-allowed;
-      box-shadow: none;
     }
 
-    button {
-      margin: 8px 5px;
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #ff9800, #ffb84d);
-      border: none;
-      border-radius: 8px;
-      color: #000;
+    .error {
+      color: #e74c3c;
       font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+      margin: 10px 0;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(255, 152, 0, 0.6);
+    .success {
+      color: #27ae60;
+      font-weight: bold;
+      margin: 10px 0;
     }
 
-    button.admin-btn {
-      background: linear-gradient(135deg, #c0392b, #e74c3c);
-      color: #fff;
-    }
-
-    button.admin-btn:hover {
-      box-shadow: 0 6px 25px rgba(192, 57, 43, 0.6);
-    }
-
-    #seriesFrame {
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      border-radius: 10px;
-      margin: 15px 0;
-      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
-    }
-
-    .modal {
-      display: none;
+    .notification {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
+      top: 20px;
+      right: 20px;
+      background: #27ae60;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
     }
 
-    .modal-content {
-      background: rgba(20, 20, 40, 0.95);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      width: 300px;
-      box-shadow: 0 0 50px rgba(255, 152, 0, 0.3);
+    .notification.error {
+      background: #e74c3c;
     }
 
-    .modal-content h2 {
-      margin-top: 0;
-      color: #ffb84d;
-    }
-
-    .modal-content button {
-      margin: 10px 5px;
-      padding: 10px 20px;
-    }
-
-    .modal-content button.close {
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: #fff;
-    }
-
-    .banned-message {
-      background: rgba(192, 57, 43, 0.3);
-      border: 2px solid rgba(192, 57, 43, 0.8);
-      padding: 25px;
-      border-radius: 10px;
-      margin: 30px;
-      position: relative;
-      z-index: 1;
-      animation: pulse-ban 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse-ban {
-      0%, 100% { box-shadow: 0 0 15px rgba(192, 57, 43, 0.4); }
-      50% { box-shadow: 0 0 30px rgba(192, 57, 43, 0.7); }
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
 
     .notifications-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
+      top: 20px;
+      right: 20px;
       z-index: 1000;
-      padding: 0;
-      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .notification {
-      background: linear-gradient(135deg, #ff9800, #ffb84d);
-      padding: 20px 40px;
-      width: 100%;
-      box-sizing: border-box;
-      animation: slideInDown 0.5s ease-out, slideOutUp 0.5s ease-in 4.5s forwards;
-      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
-    }
-
-    .notification-text {
-      color: #000;
+    .logout-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #e74c3c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
       font-weight: bold;
-      font-size: 18px;
-      margin: 0;
+      z-index: 999;
     }
 
-    @keyframes slideInDown {
-      from {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideOutUp {
-      from {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-    }
-
-    body.notification-active {
-      padding-top: 60px;
-    }
-
-    .spin-result {
-      background: rgba(255, 152, 0, 0.1);
-      border: 2px solid rgba(255, 152, 0, 0.3);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 20px auto;
-      width: fit-content;
-      font-size: 18px;
-      font-weight: bold;
-      color: #27ae60;
-    }
-
-    p {
-      color: #b0b0ff;
-      margin: 10px 0;
-    }
-
-    iframe {
-      border-radius: 10px;
+    .logout-button:hover {
+      background: #c0392b;
     }
 
     .interaction-stats {
-      background: rgba(255, 152, 0, 0.1);
-      border: 1px solid rgba(255, 152, 0, 0.3);
-      padding: 10px;
-      border-radius: 8px;
-      margin: 15px 0;
+      background: #222;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px auto;
+      max-width: 600px;
+      text-align: left;
       font-size: 13px;
       text-align: left;
     }
 
     .interaction-stats p {
       margin: 5px 0;
+      color: #ffb84d;
+    }
+
+    .autoplay-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .autoplay-toggle input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .autoplay-toggle label {
+      cursor: pointer;
+      font-weight: bold;
       color: #ffb84d;
     }
   </style>
@@ -499,6 +337,7 @@
     let currentRotation = 0;
     let heartbeatInterval;
     let lastHeartbeatTime = Date.now();
+    let autoplayEnabled = localStorage.getItem('autoplayEnabled') === 'true';
 
     // ✅ NEW: Watch Session Tracking
     let currentWatchSession = null;
@@ -512,304 +351,197 @@
     };
 
     const pinoyUsernames = [
-      'MariaSantos', 'juan_dela_cruz', 'RosaMaria23', 'CarlosGutierrez', 'AnaLuisa',
-      'PedroRamos42', 'MarianoSotz', 'Corazon89', 'AmeliaLovit', 'ErnestoMed',
-      'ElenaNiel', 'DiegoOrtiz', 'SofiaRamos', 'Ramon_Cruz', 'AuroraLight99',
-      'JavierSykes', 'CarmenRose', 'FernandoMax', 'CatalinaMS', 'RubenNeil',
-      'DoloresRay', 'VicenteMarcos', 'ManuelaLynn', 'ArturoVega88', 'RositaRay',
-      'SergioPena', 'AngelinaMa', 'AlexanderDe', 'MarcosJuan77', 'LuisaMarie',
-      'RafaelGod', 'IsabellaGrace', 'BernardoRam', 'CristinaLee', 'DavidMark55',
-      'EstherMay', 'FelipeSuarez', 'GabrielRod', 'HenrietteMay', 'IanAntonio66',
-      'JesusPena', 'KarlaMina', 'LeonardoSan', 'MartinezPhi99', 'NorbertoMax'
+      "MangJuan", "PinoyKing", "AlamKo", "KarenBit", "TrueBlue",
+      "Pambihira", "Sipag&Tiyaga", "LumalakasAng", "MakabagoBoy", "NoypiPride"
     ];
-
-    const rewards = [100, 200, 500, 1000];
 
     const wheelPrizes = [
-      { points: 0.20, chance: 60 },
-      { points: 0.50, chance: 35 },
-      { points: 0.80, chance: 4.9 },
-      { points: 1, chance: 0.08 },
-      { points: 1, chance: 0.008 },
-      { points: 1, chance: 0.0015 },
-      { points: 1, chance: 0.0004 },
-      { points: 0.80, chance: 0.0002 },
-      { points: 0.20, chance: 0.0000001 }
+      { points: 1, label: "1 Point", color: "#FFD700" },
+      { points: 5, label: "5 Points", color: "#FF6B6B" },
+      { points: 2, label: "2 Points", color: "#4ECDC4" },
+      { points: 10, label: "10 Points", color: "#95E1D3" },
+      { points: 3, label: "3 Points", color: "#F38181" },
+      { points: 7, label: "7 Points", color: "#AA96DA" },
+      { points: 4, label: "4 Points", color: "#FCBAD3" },
+      { points: 8, label: "8 Points", color: "#A8D8EA" }
     ];
 
-    function getRandomBotUsername() {
-      return pinoyUsernames[Math.floor(Math.random() * pinoyUsernames.length)];
-    }
-
-    function getRandomReward() {
-      return rewards[Math.floor(Math.random() * rewards.length)];
-    }
-
-    function showNotification(message) {
-      const container = document.getElementById('notificationsContainer');
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.innerHTML = `<p class="notification-text">${message}</p>`;
-      container.appendChild(notification);
-      
-      document.body.classList.add('notification-active');
-
-      setTimeout(() => {
-        notification.remove();
-        if (container.children.length === 0) {
-          document.body.classList.remove('notification-active');
-        }
-      }, 5000);
-    }
-
-    function createWheel() {
-      const wheelDiv = document.getElementById('wheel');
-      wheelDiv.innerHTML = '';
-      
-      const segmentAngle = 360 / wheelPrizes.length;
-      wheelPrizes.forEach((prize, index) => {
-        const segment = document.createElement('div');
-        segment.className = 'wheel-segment';
-        segment.style.transform = `rotate(${segmentAngle * index}deg)`;
-        segment.textContent = '₱' + prize.points;
-        wheelDiv.appendChild(segment);
-      });
-      
-      currentRotation = 0;
-      wheelDiv.style.transition = 'none';
-      wheelDiv.style.transform = `rotate(${currentRotation}deg)`;
-    }
-
-    function getRandomPrize() {
-      const random = Math.random() * 100;
-      let cumulative = 0;
-      
-      for (let prize of wheelPrizes) {
-        cumulative += prize.chance;
-        if (random <= cumulative) {
-          return prize;
-        }
-      }
-      
-      return wheelPrizes[0];
-    }
-
-    function startBotClaims() {
-      setInterval(() => {
-        const botUsername = getRandomBotUsername();
-        const reward = getRandomReward();
-        showNotification(`🎉 ${botUsername} claimed ₱${reward}!`);
-      }, Math.random() * 20000 + 10000);
-    }
-
-    function startHeartbeat() {
-      if (heartbeatInterval) clearInterval(heartbeatInterval);
-      
-      heartbeatInterval = setInterval(async () => {
-        lastHeartbeatTime = Date.now();
-        if (userRef) {
-          try {
-            await setDoc(userRef, { lastSeen: new Date().toISOString() }, { merge: true });
-            console.log("✅ Heartbeat sent");
-          } catch (err) {
-            console.error("❌ Heartbeat failed - user may be offline");
-            try {
-              await setDoc(userRef, { activityStatus: "inactive" }, { merge: true });
-            } catch (e) {
-              console.error("Could not update status");
-            }
-          }
-        }
-      }, 5000);
-    }
-
-    function stopHeartbeat() {
-      if (heartbeatInterval) {
-        clearInterval(heartbeatInterval);
-        heartbeatInterval = null;
-      }
-    }
-
-    // ✅ NEW: Interaction tracking functions
-    window.trackInteraction = async function(type) {
-      if (!currentWatchSession) return;
-      
-      if (type === 'click') interactionStats.clicks++;
-      if (type === 'touch') interactionStats.touches++;
-      if (type === 'mouseenter') interactionStats.mouseEnters++;
-      
-      interactionStats.lastInteractionTime = Date.now();
-      
-      try {
-        await setDoc(userRef, {
-          lastInteraction: new Date().toISOString(),
-          interactionData: interactionStats
-        }, { merge: true });
-      } catch (err) {
-        console.error("Error tracking interaction:", err);
-      }
-    };
-
-    window.addEventListener('blur', async () => {
-      if (watching && userRef) {
-        stopHeartbeat();
-        try {
-          await setDoc(userRef, { activityStatus: "away" }, { merge: true });
-        } catch (err) {
-          console.error("Error setting status to away:", err);
-        }
-      }
-    });
-
-    window.addEventListener('focus', async () => {
-      if (watching && userRef) {
-        startHeartbeat();
-        try {
-          await setDoc(userRef, { activityStatus: "active" }, { merge: true });
-        } catch (err) {
-          console.error("Error setting status to active:", err);
-        }
-      }
-    });
-
-    document.addEventListener('visibilitychange', async () => {
-      if (document.hidden) {
-        stopHeartbeat();
-        if (userRef && watching) {
-          try {
-            await setDoc(userRef, { activityStatus: "inactive" }, { merge: true });
-            console.log("📵 User marked as inactive (page hidden)");
-          } catch (err) {
-            console.error("Error setting status to inactive:", err);
-          }
-        }
-      } else {
-        if (watching && userRef) {
-          startHeartbeat();
-          try {
-            await setDoc(userRef, { activityStatus: "active" }, { merge: true });
-            console.log("🟢 User marked as active (page visible)");
-          } catch (err) {
-            console.error("Error setting status to active:", err);
-          }
-        }
-      }
-    });
-
-    window.spinWheel = async () => {
-      const pts = minuteCounter / 300;
-      
-      if (pts < 1) {
-        alert("You need at least 1 point to spin!");
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
         return;
       }
 
-      if (isSpinning) {
-        alert("Already spinning...");
+      userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          username: user.email.split("@")[0],
+          email: user.email,
+          minuteCounter: 0,
+          activityStatus: "inactive",
+          createdAt: new Date().toISOString(),
+          lastActivityTime: new Date().toISOString()
+        });
+      }
+
+      userData = userSnap.data() || {};
+      minuteCounter = userData.minuteCounter || 0;
+      currentUserName = userData.username || "User";
+
+      document.getElementById("greeting").textContent = `Welcome, ${currentUserName}! 🎯`;
+      document.getElementById("points").textContent = (minuteCounter / 300).toFixed(4) + " points";
+      
+      const earnings = userData.earnings || {};
+      document.getElementById("pending").textContent = earnings.pending || "0";
+      document.getElementById("total").textContent = earnings.total || "0";
+
+      // ✅ Set autoplay checkbox
+      document.getElementById("autoplayToggle").checked = autoplayEnabled;
+
+      createWheelCanvas();
+    });
+
+    window.logout = () => {
+      signOut(auth).then(() => {
+        window.location.href = "index.html";
+      });
+    };
+
+    function createWheelCanvas() {
+      const canvas = document.getElementById('wheel');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+      const sliceAngle = (Math.PI * 2) / wheelPrizes.length;
+
+      wheelPrizes.forEach((prize, index) => {
+        const startAngle = index * sliceAngle;
+        const endAngle = (index + 1) * sliceAngle;
+
+        ctx.fillStyle = prize.color;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.lineTo(centerX, centerY);
+        ctx.fill();
+
+        ctx.strokeStyle = '#111';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.lineTo(centerX, centerY);
+        ctx.stroke();
+
+        const textAngle = startAngle + sliceAngle / 2;
+        const textX = centerX + Math.cos(textAngle) * (radius * 0.7);
+        const textY = centerY + Math.sin(textAngle) * (radius * 0.7);
+
+        ctx.fillStyle = '#111';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(prize.label, textX, textY);
+      });
+
+      const centerCircleRadius = 30;
+      ctx.fillStyle = '#ff9800';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, centerCircleRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 20px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('SPIN', centerX, centerY);
+    }
+
+    window.spin = async () => {
+      if (isSpinning || minuteCounter < 300) {
+        alert("You need 300 points (1 minute watched) to spin!");
         return;
       }
 
       isSpinning = true;
-      document.getElementById('spinBtn').disabled = true;
+      document.querySelector('.spin-button').disabled = true;
 
-      try {
-        minuteCounter -= 300;
-        await setDoc(userRef, { minuteCounter }, { merge: true });
+      await setDoc(userRef, { minuteCounter }, { merge: true });
 
-        const wheel = document.getElementById('wheel');
-        wheel.style.transition = 'none';
-        wheel.style.transform = `rotate(${currentRotation}deg)`;
-        void wheel.offsetWidth;
-        
-        const spins = 10;
-        const extraDegrees = Math.floor(Math.random() * 360);
-        const totalRotation = spins * 360 + extraDegrees;
-        
-        wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        wheel.style.transform = `rotate(${currentRotation + totalRotation}deg)`;
+      const wheel = document.getElementById('wheel');
+      wheel.style.transition = 'none';
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+      void wheel.offsetWidth;
+      
+      const spins = 10;
+      const extraDegrees = Math.floor(Math.random() * 360);
+      const totalRotation = spins * 360 + extraDegrees;
+      
+      wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      wheel.style.transform = `rotate(${currentRotation + totalRotation}deg)`;
 
-        await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-        currentRotation = (currentRotation + totalRotation) % 360;
+      currentRotation = (currentRotation + totalRotation) % 360;
 
-        const winningIndex = Math.floor((360 - (extraDegrees % 360)) / (360 / wheelPrizes.length)) % wheelPrizes.length;
-        const prize = wheelPrizes[winningIndex];
+      const winningIndex = Math.floor((360 - (extraDegrees % 360)) / (360 / wheelPrizes.length)) % wheelPrizes.length;
+      const prize = wheelPrizes[winningIndex];
 
-        const pointsToAdd = prize.points * 300;
-        minuteCounter += pointsToAdd;
+      const pointsToAdd = prize.points * 300;
+      minuteCounter += pointsToAdd;
 
-        await setDoc(userRef, { minuteCounter }, { merge: true });
+      await setDoc(userRef, { minuteCounter }, { merge: true });
 
-        document.getElementById('resultText').innerText = `🎉 You Won: ₱${prize.points}!`;
-        document.getElementById('resultModal').style.display = 'flex';
+      document.getElementById("points").textContent = (minuteCounter / 300).toFixed(4) + " points";
 
-        updateUI();
-      } catch (err) {
-        alert("Error during spin: " + err.message);
-      } finally {
-        isSpinning = false;
-        document.getElementById('spinBtn').disabled = false;
-      }
+      showNotification(`🎉 You won ${prize.points} points! Total: ${(minuteCounter / 300).toFixed(4)} points`);
+
+      isSpinning = false;
+      document.querySelector('.spin-button').disabled = false;
     };
 
-    window.closeResultModal = () => {
-      document.getElementById('resultModal').style.display = 'none';
-    };
+    function showNotification(message, isError = false) {
+      const notification = document.createElement('div');
+      notification.className = `notification ${isError ? 'error' : ''}`;
+      notification.textContent = message;
+      document.querySelector('.notifications-container').appendChild(notification);
 
-    onAuthStateChanged(auth, async (u) => {
-      if (u) {
-        const usersSnap = await getDocs(query(collection(db, "users"), where("uid", "==", u.uid)));
-        
-        if (!usersSnap.empty) {
-          const userDoc = usersSnap.docs[0];
-          userRef = doc(db, "users", userDoc.id);
-          userData = userDoc.data();
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
 
-          currentUserName = userData.userName || "User";
+    function startHeartbeat() {
+      heartbeatInterval = setInterval(() => {
+        lastHeartbeatTime = Date.now();
+      }, 5000);
+    }
 
-          if (userData.banned === true) {
-            document.body.innerHTML = `
-              <div class="banned-message">
-                <h1>⛔ Account Banned</h1>
-                <p>Your account has been banned and you cannot access this service.</p>
-                <p>If you believe this is an error, please contact support.</p>
-                <button onclick="logout()" style="background:#ff9800; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Logout</button>
-              </div>
-            `;
-            return;
-          }
-
-          document.getElementById("greeting").innerText =
-            "Hello, " + currentUserName + "!";
-
-          minuteCounter = userData.minuteCounter || 0;
-          createWheel();
-          updateUI();
-          startBotClaims();
-          startHeartbeat();
-
-          if (u.email === "shadowtrimz@gmail.com") {
-            const adminBtn = document.getElementById("adminBtn");
-            adminBtn.style.display = "inline-block";
-          }
-        } else {
-          console.error("User not found in Firestore");
-          window.location.href = "index.html";
-        }
-      } else {
-        window.location.href = "index.html";
-      }
-    });
+    function stopHeartbeat() {
+      if (heartbeatInterval) clearInterval(heartbeatInterval);
+    }
 
     window.loadSeries = async () => {
-      document.getElementById("seriesFrame").src =
-        document.getElementById("seriesSelect").value;
+      const selectedUrl = document.getElementById("seriesSelect").value;
+      const seriesName = document.getElementById("seriesSelect").options[document.getElementById("seriesSelect").selectedIndex].text;
+      
+      // Add autoplay parameter to URL
+      let urlWithAutoplay = selectedUrl;
+      if (!urlWithAutoplay.includes('?')) {
+        urlWithAutoplay += '?autoplay=1';
+      } else {
+        urlWithAutoplay += '&autoplay=1';
+      }
+      
+      document.getElementById("seriesFrame").src = urlWithAutoplay;
       watching = true;
       startHeartbeat();
 
-      // ✅ NEW: Create watch session
       currentWatchSession = {
-        seriesName: document.getElementById("seriesSelect").options[document.getElementById("seriesSelect").selectedIndex].text,
+        seriesName: seriesName,
         startTime: new Date().toISOString(),
         pointsEarnedAtStart: minuteCounter / 300
       };
@@ -832,44 +564,6 @@
 
       document.getElementById("statusBadge").textContent = "🟢 ACTIVE";
       document.getElementById("statusBadge").className = "status-badge status-active";
-
-      // ✅ NEW: Add interaction event listeners to iframe
-      const seriesFrame = document.getElementById("seriesFrame");
-      seriesFrame.addEventListener('click', () => trackInteraction('click'));
-      seriesFrame.addEventListener('touchstart', () => trackInteraction('touch'));
-      seriesFrame.addEventListener('mouseenter', () => trackInteraction('mouseenter'));
-
-      if (updateInterval) clearInterval(updateInterval);
-      updateInterval = setInterval(async () => {
-        if (watching) {
-          minuteCounter++;
-          await setDoc(userRef, { 
-            minuteCounter, 
-            lastActivityTime: new Date().toISOString(),
-            interactionData: interactionStats
-          }, { merge: true });
-          updateUI();
-          updateInteractionDisplay();
-        }
-      }, 60000);
-    };
-
-    // ✅ NEW: Display interaction stats
-    window.updateInteractionDisplay = function() {
-      const statsDiv = document.getElementById("interactionStats");
-      if (statsDiv && currentWatchSession) {
-        const sessionDuration = Math.floor((Date.now() - Date.parse(currentWatchSession.startTime)) / 1000 / 60);
-        const currentPoints = (minuteCounter / 300).toFixed(4);
-        const pointsEarned = currentPoints - currentWatchSession.pointsEarnedAtStart;
-
-        statsDiv.innerHTML = `
-          <p><strong>Series:</strong> ${currentWatchSession.seriesName}</p>
-          <p><strong>Watch Time:</strong> ${sessionDuration} minutes</p>
-          <p><strong>Interactions:</strong> ${interactionStats.clicks} clicks + ${interactionStats.touches} touches</p>
-          <p><strong>Points This Session:</strong> ${pointsEarned.toFixed(4)}</p>
-          <p><strong>Session Status:</strong> 🟢 ACTIVE WATCHING</p>
-        `;
-      }
     };
 
     window.stopWatching = async () => {
@@ -877,7 +571,6 @@
       stopHeartbeat();
       if (updateInterval) clearInterval(updateInterval);
 
-      // ✅ NEW: Save final session data
       if (currentWatchSession) {
         const sessionDuration = Math.floor((Date.now() - Date.parse(currentWatchSession.startTime)) / 1000 / 60);
         const pointsEarned = (minuteCounter / 300) - currentWatchSession.pointsEarnedAtStart;
@@ -911,81 +604,49 @@
       alert("Stopped watching. Status set to Inactive.");
     };
 
-    // ✅ NEW: Calculate verification score (0-100)
-    function calculateVerificationScore(durationMinutes, pointsEarned, stats) {
-      let score = 100;
-      
-      // Expected: 1 point per minute
-      const expectedPoints = durationMinutes * (1/60); // ~0.016 per minute
-      const pointsRatio = pointsEarned / (expectedPoints > 0 ? expectedPoints : 1);
-      
-      if (pointsRatio > 2) score -= 30; // Too many points for time
-      if (pointsRatio < 0.5) score -= 15; // Too few points
-      
-      // Expected: at least 2 interactions per 10 minutes
-      const expectedInteractions = durationMinutes / 5;
-      const totalInteractions = stats.clicks + stats.touches + stats.mouseEnters;
-      if (totalInteractions < expectedInteractions * 0.5) score -= 20; // Too few interactions
-      
-      return Math.max(0, score);
+    function calculateVerificationScore(duration, points, stats) {
+      let score = 50;
+      if (duration >= 20) score += 20;
+      if (duration >= 40) score += 15;
+      if (stats.clicks + stats.touches > 0) score += 10;
+      if (points > 0) score += 5;
+      return Math.min(score, 100);
     }
 
-    async function updateUI() {
-      const snap = await getDoc(userRef);
-      if (snap.exists()) userData = snap.data();
-      
-      const pointsEarned = (minuteCounter / 300).toFixed(4);
-      document.getElementById("points").innerText =
-        pointsEarned + " points";
-      document.getElementById("pending").innerText =
-        userData.pendingEarnings || 0;
-      document.getElementById("total").innerText =
-        userData.totalEarnings || 0;
+    // Interaction tracking
+    document.addEventListener('click', () => {
+      if (watching) interactionStats.clicks++;
+    });
 
-      const status = userData.activityStatus || "inactive";
-      if (status === "active") {
-        document.getElementById("statusBadge").textContent = "🟢 ACTIVE";
-        document.getElementById("statusBadge").className = "status-badge status-active";
-      } else {
-        document.getElementById("statusBadge").textContent = "⚫ INACTIVE";
-        document.getElementById("statusBadge").className = "status-badge status-inactive";
-      }
-    }
+    document.addEventListener('touchstart', () => {
+      if (watching) interactionStats.touches++;
+    });
 
-    window.claimReward = async (cost) => {
-      const pts = minuteCounter / 300;
-
-      if (!userData.payoutMethod || !userData.payoutNumber || !userData.payoutName) {
-        alert("❌ Please set up your payout info first!");
-        return;
-      }
-
-      if (pts >= cost) {
-        const newPending = (userData.pendingEarnings || 0) + cost;
-        minuteCounter -= cost * 300;
-        await setDoc(userRef, { minuteCounter, pendingEarnings: newPending }, { merge: true });
-        
-        const displayName = userData.userName || "User";
-        showNotification(`🎉 ${displayName} claimed ₱${cost}!`);
-        
-        alert("✅ ₱" + cost + " added to Pending Earnings for " +
-              displayName + " via " + userData.payoutMethod + "!");
-        updateUI();
-      } else {
-        alert("❌ Not enough points yet!");
-      }
+    // ✅ NEW: Autoplay toggle
+    window.toggleAutoplay = () => {
+      autoplayEnabled = document.getElementById("autoplayToggle").checked;
+      localStorage.setItem('autoplayEnabled', autoplayEnabled);
+      showNotification(`Autoplay ${autoplayEnabled ? 'enabled' : 'disabled'}`);
     };
 
-    window.logout = () => signOut(auth).then(async () => {
-      stopHeartbeat();
-      if (userRef) {
-        await setDoc(userRef, { activityStatus: "inactive" }, { merge: true });
+    // Real-time point updates
+    if (updateInterval) clearInterval(updateInterval);
+    updateInterval = setInterval(() => {
+      if (watching) {
+        minuteCounter += 5;
+        document.getElementById("points").textContent = (minuteCounter / 300).toFixed(4) + " points";
       }
-      window.location.href = "index.html";
-    });
+    }, 60000);
+
+    window.onunload = () => {
+      if (updateInterval) clearInterval(updateInterval);
+      stopHeartbeat();
+    };
   </script>
 </head>
 <body>
+  <button class="logout-button" onclick="logout()">🚪 Logout</button>
+
   <div class="particles">
     <div class="particle"></div>
     <div class="particle"></div>
@@ -1013,11 +674,20 @@
     <select id="seriesSelect">
       <option value="https://trimz.tv/system-analyzer?ep=1">System Analyzer</option>
       <option value="https://trimz.tv/the-gamer?ep=1">The Gamer</option>
+      <option value="https://trimz.tv/player-reborn?ep=1">Player Reborn</option>
+      <option value="https://trimz.tv/quest-supremacy?ep=1">Quest Supremacy</option>
       <option value="https://trimz.tv/99-reinforced-wooden-stick?ep=1">+99 Reinforced Wooden Stick</option>
       <option value="https://trimz.tv/slam-jam?ep=1">Slam Jam</option>
       <option value="https://trimz.tv/guardians-of-rokia?ep=1">Guardians of Rokia</option>
       <option value="https://trimz.tv/lifeexe?ep=1">Life.exe</option>
     </select>
+
+    <!-- ✅ AUTOPLAY TOGGLE -->
+    <div class="autoplay-toggle">
+      <input type="checkbox" id="autoplayToggle" onchange="toggleAutoplay()">
+      <label for="autoplayToggle">Enable Autoplay Next Episode</label>
+    </div>
+
     <div style="margin-top:20px;">
       <iframe id="seriesFrame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
     </div>
@@ -1030,37 +700,12 @@
   </div>
 
   <div class="section">
-    <h2>🎡 Spin the Wheel</h2>
-    <p style="font-size:14px; color:#ff9800;">Cost: 1 point per spin</p>
+    <h2>🎰 Daily Spin Wheel</h2>
     <div class="wheel-container">
       <div class="pointer"></div>
-      <div class="wheel" id="wheel"></div>
+      <canvas id="wheel" width="300" height="300"></canvas>
     </div>
-    <button class="spin-button" id="spinBtn" onclick="spinWheel()">🎡 SPIN</button>
-  </div>
-
-  <div class="section">
-    <h2>💰 Rewards</h2>
-    <div class="eligibility">
-      <div class="card"><h3>Reward ₱100</h3><p>Cost: 100 points</p><button onclick="claimReward(100)">Claim</button></div>
-      <div class="card"><h3>Reward ₱200</h3><p>Cost: 200 points</p><button onclick="claimReward(200)">Claim</button></div>
-      <div class="card"><h3>Reward ₱500</h3><p>Cost: 500 points</p><button onclick="claimReward(500)">Claim</button></div>
-      <div class="card"><h3>Reward ₱1000</h3><p>Cost: 1000 points</p><button onclick="claimReward(1000)">Claim</button></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <button onclick="window.location.href='payout.html'">💳 Update Payout Info</button>
-    <button id="adminBtn" class="admin-btn" onclick="window.location.href='admin.html'" style="display:none;">🚀 Admin Dashboard</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-
-  <div id="resultModal" class="modal">
-    <div class="modal-content">
-      <h2>Spin Result!</h2>
-      <div id="resultText" style="font-size:24px; margin:20px 0; color:#27ae60;"></div>
-      <button onclick="closeResultModal()" class="close">Close</button>
-    </div>
+    <button class="spin-button" onclick="spin()">SPIN NOW</button>
   </div>
 </body>
 </html>
