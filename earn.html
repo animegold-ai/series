@@ -68,12 +68,6 @@
       animation: glow 2s ease-in-out infinite;
     }
 
-    h2 {
-      color: #ffb84d;
-      margin: 20px 0 15px 0;
-      font-size: 1.5em;
-    }
-
     @keyframes glow {
       0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 152, 0, 0.5)); }
       50% { filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8)); }
@@ -85,7 +79,7 @@
       border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
-      max-width: 900px;
+      max-width: 800px;
       box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
     }
 
@@ -155,8 +149,8 @@
 
     #seriesFrame {
       width: 100%;
-      max-width: 100%;
-      height: 600px;
+      max-width: 640px;
+      height: 360px;
       border-radius: 10px;
       border: 3px solid #ff9800;
       margin: 20px auto;
@@ -290,6 +284,7 @@
       max-width: 600px;
       text-align: left;
       font-size: 13px;
+      text-align: left;
     }
 
     .interaction-stats p {
@@ -318,30 +313,22 @@
     }
 
     /* Episode Grid Styles */
-    .episodes-container {
-      background: #1a1a1a;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 900px;
-    }
-
     .episodes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-      gap: 10px;
-      margin: 20px 0;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      margin: 15px 0;
     }
 
     .episode-btn {
       background: #333;
       border: 2px solid #555;
       color: #fff;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 8px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 12px;
       transition: all 0.3s ease;
     }
 
@@ -351,23 +338,14 @@
     }
 
     .episode-btn.active {
-      background: linear-gradient(135deg, #ff9800, #ffb84d);
+      background: #ff9800;
       border-color: #ff9800;
       color: #111;
-      box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
     }
 
     .episode-btn.watched {
       background: #27ae60;
       border-color: #2ecc71;
-      color: white;
-    }
-
-    .series-selector {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 20px;
     }
   </style>
   <script type="module">
@@ -398,10 +376,9 @@
     let autoplayEnabled = localStorage.getItem('autoplayEnabled') === 'true';
     let currentSeries = "system-analyzer";
     let currentEpisode = 1;
-    let totalEpisodes = 30;
     let watchedEpisodes = new Set();
 
-    // Watch Session Tracking
+    // ✅ NEW: Watch Session Tracking
     let currentWatchSession = null;
     let interactionStats = {
       clicks: 0,
@@ -460,6 +437,7 @@
       document.getElementById("pending").textContent = earnings.pending || "0";
       document.getElementById("total").textContent = earnings.total || "0";
 
+      // ✅ Set autoplay checkbox
       document.getElementById("autoplayToggle").checked = autoplayEnabled;
 
       createWheelCanvas();
@@ -474,9 +452,10 @@
 
     function generateEpisodeButtons() {
       const container = document.getElementById("episodesGrid");
+      if (!container) return;
       container.innerHTML = "";
       
-      for (let i = 1; i <= totalEpisodes; i++) {
+      for (let i = 1; i <= 30; i++) {
         const btn = document.createElement("button");
         btn.className = "episode-btn";
         btn.textContent = i;
@@ -495,6 +474,7 @@
 
     window.loadEpisode = (episodeNum) => {
       currentEpisode = episodeNum;
+      const seriesName = document.getElementById("seriesSelect").options[document.getElementById("seriesSelect").selectedIndex].text;
       const url = `https://trimz.tv/${currentSeries}`;
       document.getElementById("seriesFrame").src = url;
       generateEpisodeButtons();
@@ -502,7 +482,7 @@
       startHeartbeat();
 
       currentWatchSession = {
-        seriesName: currentSeries,
+        seriesName: seriesName,
         episode: episodeNum,
         startTime: new Date().toISOString(),
         pointsEarnedAtStart: minuteCounter / 300
@@ -764,33 +744,31 @@
 
   <div class="section">
     <h2>👀 Watch Series</h2>
-    <div class="series-selector">
-      <select id="seriesSelect" onchange="changeSeries()">
-        <option value="system-analyzer">System Analyzer</option>
-        <option value="the-gamer">The Gamer</option>
-        <option value="player-reborn">Player Reborn</option>
-        <option value="quest-supremacy">Quest Supremacy</option>
-        <option value="99-reinforced-wooden-stick">+99 Reinforced Wooden Stick</option>
-        <option value="slam-jam">Slam Jam</option>
-        <option value="guardians-of-rokia">Guardians of Rokia</option>
-        <option value="lifeexe">Life.exe</option>
-      </select>
+    <select id="seriesSelect" onchange="changeSeries()">
+      <option value="system-analyzer">System Analyzer</option>
+      <option value="the-gamer">The Gamer</option>
+      <option value="player-reborn">Player Reborn</option>
+      <option value="quest-supremacy">Quest Supremacy</option>
+      <option value="99-reinforced-wooden-stick">+99 Reinforced Wooden Stick</option>
+      <option value="slam-jam">Slam Jam</option>
+      <option value="guardians-of-rokia">Guardians of Rokia</option>
+      <option value="lifeexe">Life.exe</option>
+    </select>
 
-      <div class="autoplay-toggle">
-        <input type="checkbox" id="autoplayToggle" onchange="toggleAutoplay()">
-        <label for="autoplayToggle">Enable Autoplay Next Episode</label>
-      </div>
-    </div>
+    <p style="margin-top: 15px; margin-bottom: 10px; font-size: 14px; color: #ffb84d;">Select Episode:</p>
+    <div id="episodesGrid" class="episodes-grid"></div>
 
-    <div class="episodes-container">
-      <h3 style="color: #ffb84d; margin-bottom: 15px;">Episodes (Total: 30)</h3>
-      <div id="episodesGrid" class="episodes-grid"></div>
+    <!-- ✅ AUTOPLAY TOGGLE -->
+    <div class="autoplay-toggle">
+      <input type="checkbox" id="autoplayToggle" onchange="toggleAutoplay()">
+      <label for="autoplayToggle">Enable Autoplay Next Episode</label>
     </div>
 
     <div style="margin-top:20px;">
-      <iframe id="seriesFrame" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
+      <iframe id="seriesFrame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
     </div>
 
+    <!-- ✅ NEW: Show interaction stats while watching -->
     <div id="interactionStats" class="interaction-stats"></div>
 
     <button onclick="stopWatching()" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff;">Stop Watching</button>
