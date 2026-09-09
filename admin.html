@@ -35,7 +35,7 @@
     .modal-content button { margin:10px 5px; padding:10px 20px; }
     .modal-content input { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; }
     .modal-content select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; }
-    .modal-content textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; font-family:monospace; background:#222; color:#fff; resize:vertical; m[...]
+    .modal-content textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; box-sizing:border-box; font-family:monospace; background:#222; color:#fff; resize:vertical; }
     .name-row { display:flex; gap:10px; align-items:center; margin:5px 0; }
     .password-row { display:flex; gap:10px; align-items:center; margin:5px 0; }
     .password-input-wrapper { display:flex; gap:5px; align-items:center; flex:1; }
@@ -66,7 +66,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getFirestore, collection, getDocs, updateDoc, doc, getDoc, deleteDoc, query, where } 
       from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut
+    import { getAuth, onAuthStateChanged, signOut, updatePassword, EmailAuthProvider, reauthenticateWithCredential
     } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -208,6 +208,7 @@
       document.getElementById("changePasswordModal").style.display = "flex";
       document.getElementById("newPasswordInput").value = "";
       document.getElementById("confirmPasswordInput").value = "";
+      document.getElementById("passwordChangeMessage").innerText = "";
     };
 
     window.closePasswordModal = function() {
@@ -218,45 +219,65 @@
     window.saveNewPassword = async function() {
       const newPassword = document.getElementById("newPasswordInput").value.trim();
       const confirmPassword = document.getElementById("confirmPasswordInput").value.trim();
+      const messageDiv = document.getElementById("passwordChangeMessage");
+
+      messageDiv.innerText = "";
 
       if (!newPassword || !confirmPassword) {
-        alert("Please fill in both password fields!");
+        messageDiv.innerText = "Please fill in both password fields!";
+        messageDiv.style.color = "#ff4444";
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        alert("Passwords do not match!");
+        messageDiv.innerText = "Passwords do not match!";
+        messageDiv.style.color = "#ff4444";
         return;
       }
 
       if (newPassword.length < 6) {
-        alert("Password must be at least 6 characters long!");
+        messageDiv.innerText = "Password must be at least 6 characters long!";
+        messageDiv.style.color = "#ff4444";
         return;
       }
 
       try {
-        // Hash the password using bcryptjs
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        
+        messageDiv.innerText = "⏳ Updating password...";
+        messageDiv.style.color = "#ff9800";
+
         const userRef = doc(db, "users", currentEditUserId);
         const snap = await getDoc(userRef);
         
         if (!snap.exists()) {
-          alert("User not found!");
+          messageDiv.innerText = "User not found!";
+          messageDiv.style.color = "#ff4444";
           return;
         }
 
         const userData = snap.data();
+        const userEmail = userData.email;
 
-        // Store the hashed password
+        // 1. Hash the password for Firestore
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // 2. Update Firestore with hashed password
         await updateDoc(userRef, { password: hashedPassword });
+        console.log("✅ Firestore password updated");
 
-        alert(`✅ Password changed successfully for ${userData.userName || userData.email}!\n\n🔐 Password is now hashed and secure.`);
-        closePasswordModal();
-        loadUsers();
+        // 3. Try to update Firebase Auth password using Admin SDK (requires backend)
+        // For now, we'll just update Firestore and notify admin
+        messageDiv.innerText = "✅ Password updated successfully! (Firestore & hash stored)";
+        messageDiv.style.color = "#27ae60";
+
+        setTimeout(() => {
+          closePasswordModal();
+          loadUsers();
+        }, 1500);
+
       } catch (err) {
-        alert("Error changing password: " + err.message);
-        console.error(err);
+        console.error("Error changing password:", err);
+        messageDiv.innerText = "Error: " + err.message;
+        messageDiv.style.color = "#ff4444";
       }
     };
 
@@ -603,6 +624,7 @@
       <p>User: <strong id="passwordUserEmail"></strong></p>
       <input type="password" id="newPasswordInput" placeholder="New Password" autocomplete="off">
       <input type="password" id="confirmPasswordInput" placeholder="Confirm Password" autocomplete="off">
+      <div id="passwordChangeMessage" style="margin:10px 0; min-height:20px; font-size:13px;"></div>
       <button onclick="saveNewPassword()" style="background:#9b59b6; width:100%;">Change Password</button>
       <button onclick="closePasswordModal()" style="background:#e74c3c; width:100%;">Cancel</button>
     </div>
