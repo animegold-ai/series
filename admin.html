@@ -61,7 +61,6 @@
     .fraud-low { background:#27ae60; color:#fff; }
     .hash-badge { display:inline-block; padding:4px 8px; border-radius:4px; font-size:11px; background:#ff9800; color:#000; font-weight:bold; margin-left:5px; }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getFirestore, collection, getDocs, updateDoc, doc, getDoc, deleteDoc, query, where } 
@@ -123,8 +122,8 @@
             `;
           }
 
-          // Check if password is hashed (bcrypt hashes start with $2a$, $2b$, or $2y$)
-          const isHashed = data.password && (data.password.startsWith('$2a$') || data.password.startsWith('$2b$') || data.password.startsWith('$2y$'));
+          // Check if password is hashed (hashed passwords typically start with $ or are long)
+          const isHashed = data.password && (data.password.length > 40 || data.password.startsWith('$'));
           const hashBadge = isHashed ? '<span class="hash-badge">🔐 HASHED</span>' : '';
 
           html += `<li>
@@ -216,6 +215,16 @@
       currentEditUserId = null;
     };
 
+    // Simple SHA256 hash function
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
     window.saveNewPassword = async function() {
       const newPassword = document.getElementById("newPasswordInput").value.trim();
       const confirmPassword = document.getElementById("confirmPasswordInput").value.trim();
@@ -258,16 +267,14 @@
         const userData = snap.data();
         const userEmail = userData.email;
 
-        // 1. Hash the password for Firestore
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        // Hash the password using SHA256
+        const hashedPassword = await hashPassword(newPassword);
 
-        // 2. Update Firestore with hashed password
+        // Update Firestore with hashed password
         await updateDoc(userRef, { password: hashedPassword });
-        console.log("✅ Firestore password updated");
+        console.log("✅ Firestore password updated with hash");
 
-        // 3. Try to update Firebase Auth password using Admin SDK (requires backend)
-        // For now, we'll just update Firestore and notify admin
-        messageDiv.innerText = "✅ Password updated successfully! (Firestore & hash stored)";
+        messageDiv.innerText = "✅ Password updated successfully!";
         messageDiv.style.color = "#27ae60";
 
         setTimeout(() => {
